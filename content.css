@@ -256,15 +256,18 @@
     color: inherit;
 }
 
-p.simplified-paragraph, .simplified-paragraph {
-    position: relative !important;
-    padding-left: 24px !important;
-    padding-right: 0 !important;
-    background: none !important;
-    box-sizing: content-box !important;
-    overflow: visible !important;
-    min-height: 1.5em !important;
-    line-height: 1.4 !important;
+p.simplified-paragraph, .simplified-paragraph, div.simplified-paragraph, li.simplified-paragraph, td.simplified-paragraph, figcaption.simplified-paragraph {
+  position: relative !important;
+  display: block !important;
+  padding-inline-start: 28px !important;
+  padding-left: 28px !important;
+  padding-right: 0 !important;
+  text-indent: 0 !important;
+  background: none !important;
+  box-sizing: content-box !important;
+  overflow: visible !important;
+  min-height: 1.5em !important;
+  line-height: 1.4 !important;
 }
 
 .simplified-paragraph-toggle {
@@ -272,6 +275,7 @@ p.simplified-paragraph, .simplified-paragraph {
     left: 0 !important;
     top: 0 !important;
     width: 16px !important;
+    max-width: 12px !important;
     height: 100% !important;
     background: #4285f4 !important;
     border: none !important;
@@ -295,6 +299,7 @@ p.simplified-paragraph, .simplified-paragraph {
     left: 0 !important;
     top: 0 !important;
     width: 16px !important;
+    max-width: 12px !important;
     height: 100% !important;
     background: #9e9e9e !important;
     border: none !important;
