@@ -1,7 +1,7 @@
 const SERVER_URL = 'https://simplify.informatik.tu-freiberg.de'; 
 
-const POPUP_SPECIAL_START_ISO = '2025-10-17T00:00:00+02:00';
-const POPUP_SPECIAL_END_ISO   = '2025-10-23T00:00:00+02:00';
+const POPUP_SPECIAL_START_ISO = '2025-10-27T00:00:00+02:00';
+const POPUP_SPECIAL_END_ISO   = '2025-11-02T00:00:00+02:00';
 
 (function() {
 	function computeStudyState() {
