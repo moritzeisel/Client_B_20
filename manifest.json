@@ -1,0 +1,56 @@
+{
+  "manifest_version": 3,
+  "name": "Simplify",
+  "version": "1.9.2",
+  "description": "Vereinfacht Text auf Webseiten.",
+  
+  "permissions": [
+    "activeTab",
+    "storage",
+    "scripting"
+  ],
+  
+  "host_permissions": [
+    "https://*/*",
+    "http://*/*"
+  ],
+  
+  "background": {
+    "service_worker": "background.js"
+  },
+  
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["config.js", "content_loader.js"],
+      "css": ["content.css"]
+    }
+  ],
+  
+  "action": {
+    "default_popup": "popup_router.html",
+    "default_title": "Simplify",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  
+  "web_accessible_resources": [
+    {
+      "resources": ["onboarding-debrief.html", "onboarding-login.html", "help.html"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  
+  "options_page": "options.html"
+} 

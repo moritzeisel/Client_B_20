@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simplify</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="popup-container">
+        <header class="popup-header">
+            <h1>Simplify</h1>
+            <div class="extension-status">
+                <span class="status-indicator" id="statusIndicator"></span>
+                <span class="status-text" id="statusText">Enabled</span>
+            </div>
+        </header>
+
+        <main class="popup-content">
+            <section class="quick-actions">
+                <h3>Schnellaktionen</h3>
+                <div class="action-buttons">
+                    <button class="action-btn" id="toggleExtension">
+
+                        <span class="btn-text">Toggle Extension</span>
+                    </button>
+                    <button class="action-btn" id="getPageInfo">
+
+                        <span class="btn-text">Alle Abschnitte Umschalten</span>
+                    </button>
+                    <button class="action-btn" id="blockCurrentPage">
+
+                        <span class="btn-text">Diese Seite Blockieren</span>
+                    </button>
+                </div>
+            </section>
+
+
+
+
+        </main>
+
+        <footer class="popup-footer">
+            <div class="footer-links">
+                <a href="#" id="openOptions">Optionen</a>
+                <a href="#" id="openHelp">Hilfe</a>
+            </div>
+            <div class="version-info">
+                v1.7.7
+            </div>
+        </footer>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="popup.js"></script>
+</body>
+</html> 

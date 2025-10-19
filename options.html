@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simplify Options</title>
+    <link rel="stylesheet" href="options.css">
+</head>
+<body>
+    <div class="options-container">
+        <header class="options-header">
+            <h1>Simplify Optionen</h1>
+        </header>
+
+        <main class="options-content">
+
+
+            <section class="options-section" aria-labelledby="blacklistHeading">
+                <h2 id="blacklistHeading">Blacklist Bearbeiten</h2>
+                <p id="blacklistHelp" class="options-help-text">Inhalte von Webseiten auf der Blacklist, werden nicht durch die Erweiterung vereinfacht. Sie können Muster wie *.beispiel.de oder exakte URLs nutzen, um Seiten zu blockieren</p>
+                
+                <div class="option-group">
+                    <label for="blacklistInput">Zur Blacklist hinzufügen:</label>
+                    <input type="text" id="blacklistInput" placeholder="e.g., *.banking.com or https://example.com" aria-describedby="blacklistHelp">
+                    <button id="addToBlacklist" type="button" class="btn btn-outline" style="margin-top: 8px;">hinzufügen</button>
+                    
+                    <label style="margin-top: 20px;">Aktuelle Blacklist:</label>
+                    <div id="blacklistContainer" class="blacklist-container">
+                        <div id="blacklistItems" role="list" aria-label="Blacklist Einträge"></div>
+                    </div>
+                    <small>Klicken Sie auf ein Element, um es aus der Blacklist zu entfernen</small>
+                    
+                    <div style="margin-top: 20px;">
+                        <button id="resetBlacklist" type="button" class="btn btn-secondary">Zurücksetzen auf Standard-Blacklist</button>
+
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="options-footer">
+            <div class="button-group">
+                <button id="saveOptions" type="button" class="btn btn-primary">Einstellungen speichern</button>
+                <button id="resetOptions" type="button" class="btn btn-secondary">Zurücksetzen auf Standardeinstellungen</button>
+
+            </div>
+            
+            <div class="status-message" id="statusMessage" role="status" aria-live="polite"></div>
+        </footer>
+    </div>
+
+    <script src="options.js"></script>
+</body>
+</html> 

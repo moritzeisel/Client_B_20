@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Onboarding Debrief - Simplify Erweiterung</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: #1a1a1a; color: #e0e0e0; line-height: 1.6;
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    }
+
+    .onboarding-container { max-width: 1000px; background: transparent; border-radius: 0; padding: 40px; margin: 20px; }
+    .header { text-align: center; margin-bottom: 30px; }
+    .header h1 { font-size: 28px; font-weight: 600; margin-bottom: 10px; color: #4285f4; }
+
+    .content { margin-bottom: 30px; }
+    .content p { font-size: 16px; margin-bottom: 16px; color: #b0b0b0; }
+    .content h2 { font-size: 20px; font-weight: 600; margin: 24px 0 12px; color: #4285f4; }
+    .content h3 { font-size: 18px; font-weight: 600; margin: 20px 0 10px; color: #e0e0e0; }
+    .content ul { margin-left: 20px; margin-bottom: 16px; color: #b0b0b0; }
+    .content li { margin-bottom: 8px; font-size: 16px; }
+
+    .button-container { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+    .btn {
+      padding: 12px 24px; border: none; border-radius: 6px; font-size: 16px; font-weight: 500;
+      text-decoration: none; display: inline-block; min-width: 120px; text-align: center;
+      transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+      cursor: pointer;
+    }
+    .btn-primary { background: #4285f4; color: #fff; }
+    .btn-primary:hover { background: #3367d6; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(66,133,244,.3); }
+    .btn-secondary { background: #6c757d; color: #fff; }
+    .btn-secondary:hover { background: #5a6268; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(108,117,125,.3); }
+    .btn:active { transform: translateY(0); }
+
+    /* Schritt-Navigation ohne JavaScript */
+    .step { display: none; }
+    /* Standard: Step 1 anzeigen */
+    #step1 { display: block; }
+    /* Gewählten Schritt anzeigen */
+    #step1:target, #step2:target { display: block; }
+    /* Wenn Step 2 gewählt ist, Step 1 ausblenden (Reihenfolge wichtig) */
+    #step2:target ~ #step1 { display: none; }
+
+    @media (prefers-color-scheme: light) {
+      body { background: #f7f7f7; color: #222; }
+      .content p { color: #555; }
+      .content li { color: #444; }
+      .content h3 { color: #222; }
+      .header h1 { color: #1a73e8; }
+      .btn-primary { background: #1a73e8; color: #fff; }
+      .btn-primary:hover { background: #185abc; box-shadow: 0 4px 12px rgba(26,115,232,.25); }
+      .btn-secondary { background: #6c757d; color: #fff; }
+      .btn-secondary:hover { background: #5a6268; box-shadow: 0 4px 12px rgba(108,117,125,.25); }
+    }
+  </style>
+</head>
+<body>
+  <div class="onboarding-container">
+    <div class="header">
+      <h1>Willkommen bei der Studie zur Simplify Erweiterung!</h1>
+    </div>
+
+    <!-- Navigation (Buttons als Links) -->
+    <div class="button-container" aria-label="Navigation">
+      <a class="btn btn-secondary" href="#step1">Zurück</a>
+      <a class="btn btn-primary" href="#step2">Weiter</a>
+    </div>
+
+    <!-- Schritt 2 zuerst platzieren (für das CSS-Sibling-Hiding) -->
+    <div id="step2" class="step">
+      <div class="content">
+        <h2>Was macht die Erweiterung?</h2>
+        <ul>
+          <li>Beim Laden einer Webseite erkennt die Erweiterung geeignete Textabschnitte und zeigt eine vereinfachte Version an.</li>
+          <li>Komplexe Sätze verständlicher machen, Fachbegriffe erläutern/umformulieren und lange Absätze lesbarer strukturieren.</li>
+          <li>Die Originaltexte bleiben lokal erhalten und können jederzeit wieder angezeigt werden.</li>
+        </ul>
+
+        <h2>So steuern Sie die Erweiterung</h2>
+        <h3>Direkt auf der Webseite</h3>
+        <ul>
+          <li>Links am Absatz erscheint ein schmaler Schalter. Ein Klick wechselt zwischen <em>vereinfacht</em> (blau) und <em>original</em> (grau).</li>
+          <li>Im Popup können Sie mit einem Klick alle Abschnitte einer Seite in den anderen Modus versetzen.</li>
+          <li>Ist die Seite ungeeignet, können Sie sie im Popup zur Blacklist hinzufügen. Dann wird dort nicht mehr vereinfacht.</li>
+        </ul>
+
+        <h3>Popup & Optionen</h3>
+        <ul>
+          <li>Damit das Simplify-Symbol im Erweiterungsreiter sichtbar wird, müssen Sie dieses über das Erweiterungsmenü anpinnen.</li>
+          <li>Nun können Sie das Popup öffnen, um den Status (Aktiv/Inaktiv/Blocked) zu sehen und mit einem Klick die Erweiterung global ein-/ausschalten.</li>
+          <li>In den Optionen (über das Popup) verwalten Sie u. a. die Blacklist. Mit dieser können Sie Seiten blockieren, auf die Simplify nicht angewendet werden soll.</li>
+        </ul>
+
+        <h2>Kurze Fragebögen (Erfahrungserhebung)</h2>
+        <ul>
+          <li>Gelegentlich erscheint eine kleine Umfrage.</li>
+          <li>Sie dauert nur wenige Sekunden. Die Häufigkeit ist begrenzt.</li>
+          <li>Sie können die Umfrage jederzeit schließen.</li>
+        </ul>
+
+        <h2>Tipps & Hilfe</h2>
+        <ul>
+          <li>Kein Schalter sichtbar? Möglicherweise ist der Text zu kurz/komplex oder die Seite dynamisch. Kurz scrollen/neu laden hilft oft.</li>
+          <li>Seite versehentlich blockiert? Entfernen Sie den Eintrag in den Optionen (Blacklist), um die Vereinfachung wieder zu erlauben.</li>
+          <li>Bei weiteren Fragen, können Sie sich gerne an <a href="mailto:Moritz-Alexander.Eisel@student.tu-freiberg.de">Moritz-Alexander.Eisel@student.tu-freiberg.de</a> wenden.</li>
+        </ul>
+
+        <h2>Nächste Schritte</h2>
+        <ul>
+          <li>Das Erweiterungssymbol in der Browserleiste anpinnen, um schnell darauf zugreifen zu können.</li>
+          <li>Mit „Fortfahren“ schließen Sie diese Einführung und können direkt loslegen.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Schritt 1 (Default sichtbar) -->
+    <div id="step1" class="step">
+      <div class="content">
+        <p>Vielen Dank für Ihre Anmeldung! Auf dieser Seite erfahren Sie, wie die Erweiterung funktioniert und wie Sie sie steuern.</p>
+
+        <h2>Studiendauer und Ablauf</h2>
+        <p>Die Studie läuft über <strong>2 Wochen</strong> und ist in zwei Phasen aufgeteilt:</p>
+        <ul>
+          <li><strong>Woche 1:</strong> Eine Teilnehmergruppe erhält vereinfachte Texte, die andere Gruppe surft ohne Vereinfachung.</li>
+          <li><strong>Woche 2:</strong> Die Teilnehmergruppen tauschen. Wer zuvor vereinfachte Texte hatte, surft nun ohne Vereinfachung (und umgekehrt).</li>
+        </ul>
+        <p>Sie erkennen jederzeit, ob die Vereinfachung aktiv ist: Inhalte wirken anders formatiert/geschrieben und das Popup der Erweiterung zeigt den entsprechenden Status.</p>
+
+        <h2>Nutzung der Browser-Erweiterung</h2>
+        <ul>
+          <li>Sie können die Erweiterung bei Bedarf deaktivieren.</li>
+          <li>Bitte nutzen Sie sie dennoch für die Studie <strong>regelmäßig</strong>.</li>
+          <li>Surfen Sie wie gewohnt. Es gibt keine besonderen Vorgaben.</li>
+          <li>Die Vereinfachung funktioniert auf den meisten Webseiten.</li>
+        </ul>
+        <p><strong>Wichtig:</strong> Webseiten von Banken, Finanzdienstleistern und ähnlichen Anbietern sind von der Vereinfachung ausgeschlossen. Diese Liste ist nicht vollständig. Sollten auf solchen Seiten dennoch Vereinfachungen erscheinen, blockieren Sie diese Seite in den Optionen oder deaktivieren Sie die Erweiterung.</p>
+
+        <h2>Fragebögen</h2>
+        <p>Sie erhalten insgesamt <strong>6 Fragebögen</strong> per E-Mail (ca. alle 2 Tage):</p>
+        <ul>
+          <li>Der erste Fragebogen kommt nach etwa <strong>2 Tagen</strong>.</li>
+          <li>Jeder Fragebogen dauert nur <strong>wenige Minuten</strong>.</li>
+          <li>Bitte beantworten Sie jeden Fragebogen innerhalb von <strong>48 Stunden</strong>.</li>
+          <li>Falls Sie die Frist verpassen, schreiben Sie mir bitte eine E-Mail.</li>
+        </ul>
+
+        <h2>Kontakt bei Fragen oder Problemen</h2>
+        <p>Bei technischen Problemen, Fragen zur Studie oder anderen Anliegen melden Sie sich jederzeit bei mir!<br>
+        E-Mail: <a href="mailto:Moritz-Alexander.Eisel@student.tu-freiberg.de">Moritz-Alexander.Eisel@student.tu-freiberg.de</a></p>
+
+        <h2>Nach der Studie</h2>
+        <p>Nach Abschluss der Studie empfehle ich, die Browser-Erweiterung zu deinstallieren. Die Vereinfachungsfunktion wird nicht mehr aktiv sein.</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

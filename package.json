@@ -1,0 +1,27 @@
+{
+  "name": "workingclient",
+  "version": "1.0.0",
+  "main": "background.js",
+  "scripts": {
+    "prebuild": "node scripts/copy-non-js.js",
+    "build": "node scripts/obfuscate.js && node scripts/verify-dist.js",
+    "postbuild": "node scripts/verify-dist.js",
+    "csp-scan": "node scripts/csp-scan.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MoeUekkei/SimplifyClientChrome.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MoeUekkei/SimplifyClientChrome/issues"
+  },
+  "homepage": "https://github.com/MoeUekkei/SimplifyClientChrome#readme",
+  "description": "",
+  "devDependencies": {
+    "javascript-obfuscator": "^4.1.1"
+  }
+}
