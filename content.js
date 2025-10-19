@@ -511,6 +511,14 @@ function initializeTextProcessing() {
         });
     });
     observer.observe(document, { subtree: true, childList: true });
+
+    window.addEventListener('resize', () => {
+        try {
+            elementTracker.forEach(tr => {
+                if (tr.element && tr.element.isConnected) enforceGutterStyles(tr.element);
+            });
+        } catch (_) {}
+    });
 }
 
 function processFoundParagraphs(paragraphs) {
@@ -600,30 +608,15 @@ function handleSimplificationResponse(elementId, simplifiedText) {
     
     if (tracker.element && tracker.element.isConnected) {
         tracker.element.classList.add('simplified-paragraph');
+        enforceGutterStyles(tracker.element);
         tracker.element.textContent = simplifiedText;
         tracker.isSimplified = true;
         
-        const toggleButton = document.createElement('button');
-        toggleButton.className = 'simplified-paragraph-toggle';
-        toggleButton.setAttribute('aria-label', 'Toggle between original and simplified text');
-        toggleButton.setAttribute('tabindex', '0');
-        
-        tracker.toggleButton = toggleButton;
+        const created = createRailToggleElement(tracker, 'simplified');
+        tracker.toggleButton = created.host;
+        tracker.resizeObserver = created.resizeObserver || null;
         tracker.popup = null;
-        
-        toggleButton.addEventListener('click', (event) => {
-            event.stopPropagation();
-            toggleParagraph(tracker);
-        });
-        
-        toggleButton.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault();
-                toggleParagraph(tracker);
-            }
-        });
-        
-        tracker.element.appendChild(toggleButton);
+        tracker.element.appendChild(created.host);
         try { maybeTriggerSiteSurvey(); } catch (e) { console.error(e); }
     } else {
         console.warn('Element no longer in DOM:', elementId);
@@ -635,8 +628,10 @@ function handleSimplificationResponse(elementId, simplifiedText) {
 function toggleParagraph(tracker) {
     if (tracker.isSimplified) {
         tracker.element.textContent = tracker.originalText;
+        enforceGutterStyles(tracker.element);
         tracker.isSimplified = false;
         toggleCountSite += 1;
+        if (tracker.resizeObserver) { try { tracker.resizeObserver.disconnect(); } catch(_) {} tracker.resizeObserver = null; }
         if (tracker.toggleButton) {
             tracker.toggleButton.remove();
             tracker.toggleButton = null;
@@ -646,28 +641,11 @@ function toggleParagraph(tracker) {
             tracker.popup = null;
         }
         
-        const greyToggleButton = document.createElement('button');
-        greyToggleButton.className = 'original-paragraph-toggle';
-        greyToggleButton.setAttribute('aria-label', 'Switch to simplified text');
-        greyToggleButton.setAttribute('tabindex', '0');
-        
-
-        
-        greyToggleButton.addEventListener('click', (event) => {
-            event.stopPropagation();
-            toggleParagraph(tracker);
-        });
-        
-        greyToggleButton.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault();
-                toggleParagraph(tracker);
-            }
-        });
-        
-        tracker.toggleButton = greyToggleButton;
+        const createdGrey = createRailToggleElement(tracker, 'original');
+        tracker.toggleButton = createdGrey.host;
+        tracker.resizeObserver = createdGrey.resizeObserver || null;
         tracker.popup = null;
-        tracker.element.appendChild(greyToggleButton);
+        tracker.element.appendChild(createdGrey.host);
 
         if (!suppressESM) {
             try {
@@ -682,8 +660,10 @@ function toggleParagraph(tracker) {
         }
     } else {
         tracker.element.textContent = tracker.simplifiedText;
+        enforceGutterStyles(tracker.element);
         tracker.isSimplified = true;
         toggleCountSite += 1;
+        if (tracker.resizeObserver) { try { tracker.resizeObserver.disconnect(); } catch(_) {} tracker.resizeObserver = null; }
         if (tracker.toggleButton) {
             tracker.toggleButton.remove();
             tracker.toggleButton = null;
@@ -693,26 +673,11 @@ function toggleParagraph(tracker) {
             tracker.popup = null;
         }
         
-        const blueToggleButton = document.createElement('button');
-        blueToggleButton.className = 'simplified-paragraph-toggle';
-        blueToggleButton.setAttribute('aria-label', 'Switch to original text');
-        blueToggleButton.setAttribute('tabindex', '0');
-
-        blueToggleButton.addEventListener('click', (event) => {
-            event.stopPropagation();
-            toggleParagraph(tracker);
-        });
-        
-        blueToggleButton.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault();
-                toggleParagraph(tracker);
-            }
-        });
-        
-        tracker.toggleButton = blueToggleButton;
+        const createdBlue = createRailToggleElement(tracker, 'simplified');
+        tracker.toggleButton = createdBlue.host;
+        tracker.resizeObserver = createdBlue.resizeObserver || null;
         tracker.popup = null;
-        tracker.element.appendChild(blueToggleButton);
+        tracker.element.appendChild(createdBlue.host);
 
         if (!suppressToggleEventLog) {
             emitToggleRawEvent(tracker, 'original', 'simplified');
@@ -725,6 +690,76 @@ function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
+}
+
+function enforceGutterStyles(element) {
+    try {
+        element.style.setProperty('position', 'relative', 'important');
+        element.style.setProperty('display', 'block', 'important');
+        const toggle = element.querySelector('.simplified-paragraph-toggle, .original-paragraph-toggle');
+        const toggleWidth = toggle ? Math.ceil(toggle.getBoundingClientRect().width) : 16;
+        const gapPx = Math.max(12, Math.min(28, toggleWidth + 8));
+        element.style.setProperty('padding-inline-start', gapPx + 'px', 'important');
+        element.style.setProperty('padding-left', gapPx + 'px', 'important');
+        element.style.setProperty('padding-right', '0', 'important');
+        element.style.setProperty('text-indent', '0', 'important');
+    } catch (_) {}
+}
+
+function createRailToggleElement(tracker, mode) {
+    const host = document.createElement('div');
+    host.className = mode === 'simplified' ? 'simplified-paragraph-toggle' : 'original-paragraph-toggle';
+    host.setAttribute('role', 'button');
+    host.setAttribute('tabindex', '0');
+    host.setAttribute('aria-label', mode === 'simplified' ? 'Switch to original text' : 'Switch to simplified text');
+
+    try { host.style.setProperty('all', 'initial', 'important'); } catch (_) {}
+    host.style.setProperty('position', 'absolute', 'important');
+    host.style.setProperty('left', '0', 'important');
+    host.style.setProperty('top', '0', 'important');
+    host.style.setProperty('height', '100%', 'important');
+    host.style.setProperty('width', '12px', 'important');
+    host.style.setProperty('border-radius', '8px', 'important');
+    host.style.setProperty('cursor', 'pointer', 'important');
+    host.style.setProperty('z-index', '10', 'important');
+    host.style.setProperty('background', mode === 'simplified' ? '#4285f4' : '#9e9e9e', 'important');
+
+    try {
+        const sr = host.attachShadow({ mode: 'open' });
+        const style = document.createElement('style');
+        style.textContent = `
+            :host { contain: content; }
+            .rail { width: 100%; height: 100%; border-radius: 8px; }
+            .rail:focus { outline: none; }
+        `;
+        const rail = document.createElement('div');
+        rail.className = 'rail';
+        rail.setAttribute('part', 'rail');
+        sr.appendChild(style);
+        sr.appendChild(rail);
+    } catch (_) {}
+
+    const onActivate = (event) => {
+        event.stopPropagation();
+        toggleParagraph(tracker);
+    };
+    host.addEventListener('click', onActivate);
+    host.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            onActivate(event);
+        }
+    });
+
+    let resizeObserver = null;
+    try {
+        resizeObserver = new ResizeObserver(() => enforceGutterStyles(tracker.element));
+        resizeObserver.observe(host);
+    } catch (_) {}
+
+    requestAnimationFrame(() => enforceGutterStyles(tracker.element));
+
+    return { host, resizeObserver };
 }
 
 function toggleAllSimplifiedParagraphs() {
@@ -862,7 +897,6 @@ async function showESMPopupForToggleOriginal() {
     const canShow = await canShowESMPopup();
     if (!canShow) return;
 
-    // remove existing ESM popup
     const existing = document.getElementById('esm-popup');
     if (existing) existing.remove();
 
